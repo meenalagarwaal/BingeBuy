@@ -1,0 +1,25 @@
+.header{
+    position: fixed;
+    z-index: 1;
+    background-color: red;
+}
+
+@media (max-width: 600px) {
+    .header {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .header .MuiTypography-root {
+      margin-bottom: 10px;
+    }
+  
+    .header .MuiToolbar {
+      width: 100%;
+      justify-content: center;
+    }
+  
+    .header .MuiIconButton-root {
+      margin-top: 10px;
+    }
+  }
