@@ -43,6 +43,12 @@ const Product = () => {
         const response = await fetch(
           `https://dummyjson.com/products/search?q=${query}`
         );
+        if (!response || !response.ok) {
+          // Handle the error, log it, or throw an exception.
+          const errorMessage = response ? `Error: ${response.statusText}` : 'No response received.';
+          console.error(errorMessage);
+          return;
+        }
         const data = await response.json();
         dispatch(fetchItemsSuccess(data.products));
         dispatch(

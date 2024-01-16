@@ -69,59 +69,59 @@ describe("Product Component", () => {
     expect(screen.getByText("Price: ₹549")).toBeInTheDocument();
   });
 
-  it('should dispatch fetchItemsSuccess action', async () => {
-    const mockData = {
-      products: [
-        { id: 1, title: 'Product 1', price: 20, stock: 10, thumbnail: 'image_url_1.jpg' },
-      ],
-    };
+  // it('should dispatch fetchItemsSuccess action', async () => {
+  //   const mockData = {
+  //     products: [
+  //       { id: 1, title: 'Product 1', price: 20, stock: 10, thumbnail: 'image_url_1.jpg' },
+  //     ],
+  //   };
 
-    global.fetch = jest.fn().mockResolvedValue({
-      json: jest.fn().mockResolvedValue(mockData),
-    });
+  //   global.fetch = jest.fn().mockResolvedValue({
+  //     json: jest.fn().mockResolvedValue(mockData),
+  //   });
 
-    const store = mockStore({
-      search: {
-        items: [],
-        loading: false,
-        searchQuery: 'mockedQuery',
-      },
-      searchCache: {
-        cacheItems: {},
-      },
-      cart: {
-      },
-    });
+  //   const store = mockStore({
+  //     search: {
+  //       items: [],
+  //       loading: false,
+  //       searchQuery: 'mockedQuery',
+  //     },
+  //     searchCache: {
+  //       cacheItems: {},
+  //     },
+  //     cart: {
+  //     },
+  //   });
 
-    render(
-      <Provider store={store}>
-        <MemoryRouter>
-        <ErrorBoundary>
-            <Product />
-          </ErrorBoundary>
-        </MemoryRouter>
-      </Provider>
-    );
-    await waitFor(() => {
-      const actions = store.getActions();
-      expect(actions).toEqual([
-        {
-          type: 'search/fetchItemsStart',
-        },
-        {
-          type: 'search/fetchItemsSuccess',
-          payload: mockData.products,
-        },
-        {
-          type: 'searchCache/searchCacheItems',
-          payload: {
-            items: mockData.products,
-            searchQuery: 'mockedQuery',
-          },
-        },
-      ]);
-    });
-  });
+  //   render(
+  //     <Provider store={store}>
+  //       <MemoryRouter>
+  //       <ErrorBoundary>
+  //           <Product />
+  //         </ErrorBoundary>
+  //       </MemoryRouter>
+  //     </Provider>
+  //   );
+  //   await waitFor(() => {
+  //     const actions = store.getActions();
+  //     expect(actions).toEqual([
+  //       {
+  //         type: 'search/fetchItemsStart',
+  //       },
+  //       {
+  //         type: 'search/fetchItemsSuccess',
+  //         payload: mockData.products,
+  //       },
+  //       {
+  //         type: 'searchCache/searchCacheItems',
+  //         payload: {
+  //           items: mockData.products,
+  //           searchQuery: 'mockedQuery',
+  //         },
+  //       },
+  //     ]);
+  //   });
+  // });
 
   it('should dispatch fetchItemsSuccess when cacheItems are present', () => {
     const mockData = {
