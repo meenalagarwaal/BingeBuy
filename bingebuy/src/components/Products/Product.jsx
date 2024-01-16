@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { Grid, Typography, Container, Paper } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useErrorBoundary } from "react-error-boundary";
 
 const Product = () => {
   const { showBoundary } = useErrorBoundary();
-  const selectedItem = useSelector((state) => state.selectedItem);
   const { id } = useParams();
   const [product, setProduct] = useState();
   const [loading, setLoading] = useState(false);

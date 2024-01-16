@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "../../store/cartSlice";
 import {
@@ -22,7 +22,6 @@ import {
 } from "../../store/searchSlice";
 import "./index.module.css";
 import { Link } from "react-router-dom";
-import AlertDialog from "../AlertDialog";
 import ButtonComponent from "../Button/index.jsx";
 
 const Product = () => {
