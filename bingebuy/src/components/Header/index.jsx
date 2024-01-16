@@ -58,12 +58,19 @@ const Header = () => {
     backgroundColor: headerColor,
     display: 'flex',
     justifyContent: 'space-between',
-    '@media (max-width:600px)': {
-      backgroundColor: 'red',
-    },
+
   }}
          >
-        <Typography variant="h6" component="div">
+        <Typography variant="h6" component="div" 
+        style={{
+          '@media (max-width:600px)': {
+            display: 'flex',
+            alignItems: 'center',
+            margin: '0px 10px 0 0'
+          }
+        }}
+         
+        >
           <IconButton onClick={toggleTheme}
            color="inherit" 
            data-testid = {isDarkTheme ? 'dark-mode-icon': 'light-mode-icon'} >
@@ -73,7 +80,7 @@ const Header = () => {
               <WbSunnyIcon style={{ color: iconColor }} />
             )}
           </IconButton>
-          Bingebuy
+          <span>Bingebuy</span>
         </Typography>
         <Typography  variant="body2"
           sx={{

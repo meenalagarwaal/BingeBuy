@@ -27,8 +27,6 @@ import ButtonComponent from "../Button/index.jsx";
 const Product = () => {
   const dispatch = useDispatch();
   const { showBoundary } = useErrorBoundary();
-  // const [isDialogOpen, setDialogOpen] = useState(false);
-
   const { search = {} } = useSelector((state) => state);
   const { items = [], loading } = search;
   const { searchQuery = "" } = search ?? {};
@@ -92,19 +90,9 @@ const Product = () => {
       console.error("Error adding item to cart:", error);
     }
   };
-  // const handleCloseDialog = () => {
-  //   setDialogOpen(false);
-  // };
-
   const handleAddToCart = (item) => {
     try {
       dispatch(addToCart(item));
-      // if (
-      //   cartItems.find((cartItem) => cartItem.id === item.id)?.quantity ===
-      //   item.stock - 1
-      // ) {
-      //   setDialogOpen(true);
-      // }
     } catch (error) {
       console.error("Error adding item to cart:", error);
     }
@@ -129,13 +117,16 @@ const Product = () => {
         {items?.map((item) => (
           <Grid item key={item.id} xs={12}>
             <Card
-              style={{
+              sx={{
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
                 padding: "10px",
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                 backgroundColor: "#EFF3F8",
+                '@media (max-width:600px)': {
+                  display: 'block'
+                }
               }}
             >
               <div

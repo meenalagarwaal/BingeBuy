@@ -17,7 +17,11 @@ export const SearchBar = ({ setQuery }) => {
         size="small"
         sx={{
           backgroundColor: '#EFF3F8', 
-          width:'600px'
+          width:'600px',
+          '@media (max-width:600px)': {
+           width:'auto',
+           marginLeft:'10px'
+          }
         }}
         InputProps={{
           startAdornment: (
