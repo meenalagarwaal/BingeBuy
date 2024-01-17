@@ -25,7 +25,6 @@ describe('cartSlice', () => {
     expect(state).toHaveLength(1);
     expect(state[0]).toEqual({ ...newItem, quantity: 1 });
   });
-
   it('should increment quantity for an existing item in the cart', () => {
     const existingItem = {
       id: '1',
@@ -43,7 +42,6 @@ describe('cartSlice', () => {
     expect(state).toHaveLength(1);
     expect(state[0]).toEqual({ ...existingItem, quantity: 2 });
   });
-
   it('should remove an item from the cart', () => {
     const itemToRemove = {
       id: '1',
@@ -61,7 +59,6 @@ describe('cartSlice', () => {
     const state = store.getState().cart;
     expect(state).toHaveLength(0);
   });
-
   it('should decrement quantity for an existing item in the cart', () => {
     const itemWithQuantity = {
       id: '1',
@@ -79,7 +76,6 @@ describe('cartSlice', () => {
     const state = store.getState().cart;
     expect(state).toHaveLength(0);
   });
-
   it('should delete an item from the cart', () => {
     const itemToDelete = {
       id: '1',
@@ -110,4 +106,10 @@ describe('cartSlice', () => {
     ]);
   });
 
+  it('should do nothing if item not found', () => {
+    const initialState = [{ id: 1, name: 'Sample Item', price: 10.0, quantity: 2 }];
+    const action = removeFromCart(2); 
+    const newState = cartReducer(initialState, action);
+    expect(newState).toEqual(initialState);
+  });
 });

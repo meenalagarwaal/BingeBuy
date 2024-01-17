@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import configureStore from 'redux-mock-store';
@@ -17,7 +17,7 @@ describe('Header', () => {
     });
   });
 
-  test('renders Header component with light mode and cart badge= ""', () => {
+  it('renders Header component with light mode and cart badge= ""', () => {
     render(
       <Router>
         <Provider store={store}>
@@ -35,7 +35,7 @@ describe('Header', () => {
     expect(cartBadge.textContent).toBe('');
   });
 
-  test('toggles dark mode on button click', () => {
+  it('toggles dark mode on button click', () => {
     render(
         <Router>
         <Provider store={store}>
@@ -52,7 +52,7 @@ describe('Header', () => {
     expect(darkModeButton).toBeInTheDocument();
   });
 
-  test('clicking on the cart icon opens the cart modal', () => {
+  it('clicking on the cart icon opens the cart modal', () => {
     render(
       <Router>
         <Provider store={store}>
@@ -68,7 +68,7 @@ describe('Header', () => {
     expect(cartModal).toBeInTheDocument();
   });
 
-test('calculates count correctly based on cartItems', () => {
+it('calculates count correctly based on cartItems', () => {
     const initialState = {
       cart: [
         { id: 1, quantity: 2 },
@@ -90,5 +90,32 @@ test('calculates count correctly based on cartItems', () => {
     const count = parseInt(countElement.textContent);
     expect(count).toBe(5); 
   });
+ 
+  // it('closes the cart modal when the close button is clicked', async () => {
+  //   render(
+  //     <Provider store={store}>
+  //       <ThemeProvider>
+  //         <Header />
+  //       </ThemeProvider>
+  //     </Provider>
+  //   );
+
+
+  //   const cartIcon = screen.getByTestId('cart-icon');
+  //   fireEvent.click(cartIcon);
+  //   const cartModal = screen.getByTestId('cart-modal');
+  //   expect(cartModal).toBeInTheDocument();
+
+  //   // Click the close button inside the modal
+  //   const closeButton = screen.getByTestId('cart-close');
+  //   fireEvent.click(closeButton);
+
+  //   // Wait for the modal to be fully closed
+  //   await waitFor(() => {
+  //     const closedCartModal = screen.queryByTestId('cart-modal');
+  //     expect(closedCartModal).toBeNull();
+  //   });
+  // });
+
 });
 

@@ -91,11 +91,7 @@ const Product = () => {
     }
   };
   const handleAddToCart = (item) => {
-    try {
       dispatch(addToCart(item));
-    } catch (error) {
-      console.error("Error adding item to cart:", error);
-    }
   };
   const handleDeleteItem = (selectedItemToDelete) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this item?");

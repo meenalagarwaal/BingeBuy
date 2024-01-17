@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from "react-redux";
 
 
-const FallbackPage = ({ resetErrorBoundary }) => {
+const FallbackPage = () => {
   const { error } = useSelector((state) => state.search);
     const image ='https://cdn.vectorstock.com/i/1000x1000/40/59/confused-businessman-vector-7574059.webp';
   return (

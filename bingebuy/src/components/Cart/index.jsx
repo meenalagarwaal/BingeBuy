@@ -24,13 +24,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-
 const Cart = ({ open, handleClose, count }) => {
   const cartItems = useSelector((state) => state.cart);
-  // const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  // const { items = []} = useSelector((state) => state.search);
   const dispatch = useDispatch();
-
   const handleRemoveFromCart = (itemId) => {
     try {
       dispatch(removeFromCart(itemId));
@@ -40,11 +36,7 @@ const Cart = ({ open, handleClose, count }) => {
   };
 
   const handleAddFromCart = (item) => {
-    try {
       dispatch(addToCart(item));
-    } catch (error) {
-      console.error("Error adding item to cart:", error);
-    }
   };
 
   const getTotalPrice = () => {
@@ -116,8 +108,12 @@ const Cart = ({ open, handleClose, count }) => {
             >
               <AddCircleIcon />
             </IconButton>
-            <ButtonComponent onClick={() => handleDeleteItemFromCart(item.id)} data-testid={`Delete${item.id}`}/>
-            {console.log(`Delete${item.id}`)}
+            <IconButton
+              aria-label="deleteButton"
+              onClick={() => handleDeleteItemFromCart(item.id)}
+            >
+            <ButtonComponent />
+            </IconButton>
           </ListItemSecondaryAction>
           </div>
         </ListItem>

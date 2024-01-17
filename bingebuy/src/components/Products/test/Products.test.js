@@ -12,9 +12,10 @@ import getItems from '../index.jsx';
 import { fetchItemsSuccess, fetchItemsFailure, fetchItemsStart } from '../../../store/searchSlice.js';
 import { removeFromCart } from '../../../store/cartSlice.js';
 import { handleRemoveFromCart } from '../index.jsx';
+import { useErrorBoundary } from 'react-error-boundary';
+import thunk from 'redux-thunk';
+import Product from "../index";
 
-import Product from "../index"; 
-// import Mocks from './Mocks.json';
 
 global.fetch = jest.fn();
 const mockStore = configureStore([]);
@@ -68,61 +69,6 @@ describe("Product Component", () => {
     expect(screen.getByText("An apple mobile which is nothing like apple")).toBeInTheDocument();
     expect(screen.getByText("Price: ₹549")).toBeInTheDocument();
   });
-
-  // it('should dispatch fetchItemsSuccess action', async () => {
-  //   const mockData = {
-  //     products: [
-  //       { id: 1, title: 'Product 1', price: 20, stock: 10, thumbnail: 'image_url_1.jpg' },
-  //     ],
-  //   };
-
-  //   global.fetch = jest.fn().mockResolvedValue({
-  //     json: jest.fn().mockResolvedValue(mockData),
-  //   });
-
-  //   const store = mockStore({
-  //     search: {
-  //       items: [],
-  //       loading: false,
-  //       searchQuery: 'mockedQuery',
-  //     },
-  //     searchCache: {
-  //       cacheItems: {},
-  //     },
-  //     cart: {
-  //     },
-  //   });
-
-  //   render(
-  //     <Provider store={store}>
-  //       <MemoryRouter>
-  //       <ErrorBoundary>
-  //           <Product />
-  //         </ErrorBoundary>
-  //       </MemoryRouter>
-  //     </Provider>
-  //   );
-  //   await waitFor(() => {
-  //     const actions = store.getActions();
-  //     expect(actions).toEqual([
-  //       {
-  //         type: 'search/fetchItemsStart',
-  //       },
-  //       {
-  //         type: 'search/fetchItemsSuccess',
-  //         payload: mockData.products,
-  //       },
-  //       {
-  //         type: 'searchCache/searchCacheItems',
-  //         payload: {
-  //           items: mockData.products,
-  //           searchQuery: 'mockedQuery',
-  //         },
-  //       },
-  //     ]);
-  //   });
-  // });
-
   it('should dispatch fetchItemsSuccess when cacheItems are present', () => {
     const mockData = {
       products: [
@@ -252,6 +198,7 @@ describe("Product Component", () => {
     const noResultsElement = screen.getByText('NO RESULTS FOUND!');
     expect(noResultsElement).toBeInTheDocument();
   });
+
   it("Clicking delete button for the first item", async() => {
     const store = mockStore({
       search: {
@@ -276,58 +223,6 @@ describe("Product Component", () => {
     expect(deleteButtons.length).toBeGreaterThan(0);
     fireEvent.click(deleteButtons[0]);
   });
-  // it('handleDeleteItem removes the selected item from the list', async () => {
-  //   // Mock the initial state with some items
-  //   const initialState = {
-  //     search: {
-  //       items: [
-  //         { id: 1, title: 'Item 1' },
-  //         { id: 2, title: 'Item 2' }
-  //       ],
-  //     },
-  //   };
-  
-  //   const store = mockStore(initialState);
-  
-  //   // Mock the fetch function
-  //   global.fetch = jest.fn().mockResolvedValue({
-  //     json: jest.fn().mockResolvedValue({ products: [/* mock your product data here */] }),
-  //   });
-  
-  //   // Render your component wrapped in a Provider with the mock store
-  //   render(
-  //     <Provider store={store}>
-  //     <MemoryRouter>
-  //     <ErrorBoundary>
-  //         <Product />
-  //       </ErrorBoundary>
-  //     </MemoryRouter>
-  //   </Provider>
-  //   );
-  
-  //   const idToDelete = 1;
-  //   const deleteButtons = await screen.findAllByTestId(`delete${idToDelete}`);
-  //   expect(deleteButtons.length).toBeGreaterThan(0);
-  //   fireEvent.click(deleteButtons[0]);
-  //   const afterMockData = {
-  //     products: [
-  //       { id: 2, title: 'Item 2' }
-  //     ],
-  //   };
-  //   // Wait for the asynchronous operations to complete
-  //   await waitFor(() => {
-  //     // Verify that the Redux store was updated with the expected state
-  //     const actions = store.getActions();
-  //     const expectedAction = {
-  //       type: 'search/fetchItemsSuccess',
-  //       payload: afterMockData.pt,
-  //     };
-  //     expect(actions).toEqual([expectedAction]);
-  //   });
-  // });
-  // afterEach(() => {
-  //   jest.restoreAllMocks();
-  // });
 
   it("Clicking add button for the first item", async() => {
     const store = mockStore({
@@ -379,41 +274,109 @@ describe("Product Component", () => {
     fireEvent.click(addButtons[0]);
   });
 
-  // it('handleAddToCart dispatches addToCart action with the correct item', async() => {
-  //   const store = mockStore({
-  //     search: {
-  //       items: [ { id: 1, title: 'Item 1', quantity: 2, price: 10, stock: 5 }],
-  //       loading: false,
-  //       searchQuery: "iPhone 9",
-  //     },
-  //     searchCache: {},
-  //     cart: [],
-  //   });
-  //   render(
-  //     <Provider store={store}>
-  //     <MemoryRouter>
-  //     <ErrorBoundary>
-  //         <Product />
-  //       </ErrorBoundary>
-  //     </MemoryRouter>
-  //   </Provider>
-  //   );
-  //   const idToDelete = 1;
-  //   const addButtons = await screen.findAllByTestId(`add${idToDelete}`);
-  //   expect(addButtons.length).toBeGreaterThan(0);
-  //   fireEvent.click(addButtons[0]);
 
-  //   await waitFor(() => {
-  //   // const expectedAction = addToCart(item);
-  //   // const actions = store.getActions();
-  //   // expect(actions).toContainEqual(expectedAction);
+  it('should dispatch addToCart action when Add to Cart button is clicked', () => {
+    const sampleProduct = {
+      id: 1,
+      title: 'Sample Product',
+      description: 'Description of the product',
+      price: 20,
+      stock: 10,
+    };
+    const initialState = {
+      search: {
+        items: [sampleProduct],
+        loading: false,
+        searchQuery: 'sample',
+      },
+      cart: [],
+    };
+    const store = mockStore(initialState);
+    const { getByTestId } = render(
+      <Provider store={store}>
+      <MemoryRouter>
+      <ErrorBoundary>
+          <Product />
+        </ErrorBoundary>
+      </MemoryRouter>
+    </Provider>
+    );
 
-  //   const expectedActions = [
-  //     addToCart({ id: 1, title: 'Item 1', quantity: 2, price: 10, stock: 5 }), // Add Item 1
-  //   ];
-  //   expect(store.getActions()).toEqual(expectedActions);
+    // Find the Add to Cart button and click it
+    const addToCartButton = screen.getByTestId(`add${sampleProduct.id}`);
+    fireEvent.click(addToCartButton);
 
-  //   });
-  // });
+    // Check if the addToCart action was dispatched with the correct payload
+    const expectedAction = addToCart(sampleProduct);
+    const actions = store.getActions();
+    expect(actions).toContainEqual(expectedAction);
+  });
 
+  it('should dispatch removeFromCart action when Remove button is clicked', () => {
+    const sampleProductInCart = {
+      id: 1,
+      title: 'Sample Product',
+      description: 'Description of the product',
+      price: 20,
+      stock: 10,
+      quantity: 2, 
+    };
+    const initialState = {
+      search: {
+        items: [sampleProductInCart],
+        loading: false,
+        searchQuery: 'sample',
+      },
+      cart: [sampleProductInCart],
+    };
+    const store = mockStore(initialState);
+    const { getByTestId } = render(
+      <Provider store={store}>
+      <MemoryRouter>
+      <ErrorBoundary>
+          <Product />
+        </ErrorBoundary>
+      </MemoryRouter>
+    </Provider>
+    );
+    const removeButton = screen.getByTestId(`remove${sampleProductInCart.id}`);
+    fireEvent.click(removeButton);
+    const expectedAction = removeFromCart(sampleProductInCart.id);
+    expect(store.getActions()).toContainEqual(expectedAction);
+  });
+
+  it('should dispatch fetchItemsSuccess action when deleting an item', () => {
+    const sampleItemToDelete = {
+      id: 1,
+      title: 'Sample Product',
+      description: 'Description of the product',
+      price: 20,
+      stock: 10,
+    };
+    const initialState = {
+      search: {
+        items: [sampleItemToDelete],
+        loading: false,
+        searchQuery: 'sample',
+      },
+      searchCache: {
+        cacheItems: {},
+      },
+    };
+    const store = mockStore(initialState);
+    const { getByTestId } = render(
+      <Provider store={store}>
+      <MemoryRouter>
+      <ErrorBoundary>
+          <Product />
+        </ErrorBoundary>
+      </MemoryRouter>
+    </Provider>
+    );
+    window.confirm = jest.fn(() => true);
+    const deleteButton = screen.getByTestId(`delete${sampleItemToDelete.id}`);
+    fireEvent.click(deleteButton);
+    const expectedAction = fetchItemsSuccess([]);
+    expect(store.getActions()).toContainEqual(expectedAction);
+  });
 });
